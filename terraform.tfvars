@@ -1,0 +1,5 @@
+ami_id           = "ami-0f3a440bbcff3d043"
+instance_type    = "t2.micro"
+key_name         = "github-actions-key"
+public_key_path  = "~/.ssh/github-actions-key.pub"
+name             = "app-dev"
