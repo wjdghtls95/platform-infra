@@ -5,8 +5,8 @@ on:
       - main
 
 jobs:
-  terraform:
-    name: 'Terraform Apply'
+  platform:
+    name: 'Terraform Apply - Platform'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -17,11 +17,35 @@ jobs:
         with:
           terraform_version: 1.5.0
 
-      - name: Terraform Init
+      - name: Terraform Init - Platform
         run: terraform init
 
-      - name: Terraform Apply
-        run: terraform apply -auto-approve -var-file="terraform.tfvars"
+      - name: Terraform Apply - Platform
+        run: terraform apply -auto-approve -var-file="platform.tfvars"
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+  swing:
+    name: 'Terraform Apply - Swing Analyzer'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: terraform/swing-analyzer
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.0
+
+      - name: Terraform Init (Swing)
+        run: terraform init
+
+      - name: Terraform Apply (Swing)
+        run: terraform apply -auto-approve -var-file="swing-analyzer.tfvars"
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
